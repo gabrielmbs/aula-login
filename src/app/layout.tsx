@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
+import "@fontsource/roboto/latin-400.css";
+import "@fontsource/roboto/latin-500.css";
+import "@fontsource/roboto/latin-600.css";
+import "@fontsource/roboto/latin-700.css";
 import "./globals.css";
 
 /**
  * ============================================================================
  * ROOT LAYOUT (src/app/layout.tsx)
  * ============================================================================
- * 
+ *
  * Papel do RootLayout no Next.js App Router:
  * - Define a estrutura HTML global (tags <html> e <body>).
  * - Carrega as fontes e os estilos globais (globals.css).
@@ -13,8 +17,9 @@ import "./globals.css";
  */
 
 export const metadata: Metadata = {
-  title: "Aula Login • Next.js & shadcn/ui",
-  description: "Exemplo didático de autenticação com Next.js, shadcn/ui e consumo de API RESTful.",
+  title: { default: "CadastroWeb", template: "%s | CadastroWeb" },
+  description: "CadastroWeb. Gestão de pessoas, simples e organizada.",
+  icons: { icon: "/brand-mark.svg" },
 };
 
 export default function RootLayout({
@@ -23,10 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body className="bg-white text-slate-900 min-h-screen antialiased">
-        {children}
-      </body>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body>{children}</body>
     </html>
   );
 }

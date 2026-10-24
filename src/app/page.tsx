@@ -2,7 +2,7 @@
  * ============================================================================
  * ROTA RAIZ: / (src/app/page.tsx)
  * ============================================================================
- * 
+ *
  * Por que redirecionar?
  * - O usuário especificou que o login deve ser acessado na rota `/login`.
  * - Ao acessar a URL base da aplicação (http://localhost:3000/), o Next.js
@@ -10,8 +10,8 @@
  */
 
 import { redirect } from "next/navigation";
+import { getSession } from "@/lib/server/session";
 
-export default function HomePage() {
-  // Redireciona o usuário imediatamente para a rota /login
-  redirect("/login");
+export default async function HomePage() {
+  redirect((await getSession()) ? "/dashboard" : "/login");
 }

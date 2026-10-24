@@ -2,7 +2,7 @@
  * ============================================================================
  * TIPAGENS E INTERFACES TYPESCRIPT PARA AUTENTICAÇÃO E API
  * ============================================================================
- * 
+ *
  * Por que tipar dados em TypeScript?
  * 1. Segurança em tempo de desenvolvimento: O compilador impede o acesso a propriedades inexistentes.
  * 2. Autocomplete e Documentação Viva: Qualquer desenvolvedor entende o formato dos dados que entram e saem.
@@ -13,6 +13,12 @@
 export interface LoginCredentials {
   email: string;
   senha: string;
+}
+
+export interface SessionUser {
+  name: string;
+  email: string;
+  role: string;
 }
 
 // Registro de usuário retornado dentro da lista 'result' da API

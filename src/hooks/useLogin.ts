@@ -4,7 +4,7 @@
  * ============================================================================
  * CUSTOM HOOK: useLogin
  * ============================================================================
- * 
+ *
  * Por que usar um Custom Hook?
  * - Princípio da Responsabilidade Única (SRP): O componente visual (LoginForm)
  *   apenas desenha os elementos na tela. O hook gerencia os estados e as ações.
@@ -15,11 +15,8 @@
 import { useState } from "react";
 import { AuthService } from "@/services/auth.service";
 import type { FormFeedbackState, LoginCredentials } from "@/types/auth.types";
-import { useRouter } from "next/navigation";
 
-export function useLogin() {
-  const router = useRouter();
-
+export function useLogin(initialError?: string) {
   // Estado para armazenar os valores dos campos do formulário
   const [credentials, setCredentials] = useState<LoginCredentials>({
     email: "",
@@ -31,8 +28,8 @@ export function useLogin() {
 
   // Estado para controlar a mensagem de retorno (sucesso ou erro) exibida na tela
   const [feedback, setFeedback] = useState<FormFeedbackState>({
-    type: "idle",
-    message: null,
+    type: initialError ? "error" : "idle",
+    message: initialError ?? null,
   });
 
   /**
@@ -40,6 +37,7 @@ export function useLogin() {
    * Pode ser usado com qualquer input baseado na propriedade 'name' ou 'id'.
    */
   function handleInputChange(field: keyof LoginCredentials, value: string) {
+    setFeedback({ type: "idle", message: null });
     setCredentials((prev) => ({
       ...prev,
       [field]: value,
@@ -49,8 +47,9 @@ export function useLogin() {
   /**
    * Submete o formulário, chama o serviço de autenticação e atualiza o estado de feedback.
    */
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (isLoading) return;
 
     // Inicia o carregamento e reseta feedbacks anteriores
     setIsLoading(true);
@@ -58,14 +57,17 @@ export function useLogin() {
 
     try {
       // Chama a camada de serviço desacoplada
-      const result = await AuthService.login(credentials);
+      const result = await AuthService.login({
+        ...credentials,
+        email: credentials.email.trim(),
+      });
 
       if (result.success) {
         setFeedback({
           type: "success",
           message: result.message,
         });
-        router.push("/dashboard");
+        window.location.replace("/dashboard");
       } else {
         setFeedback({
           type: "error",
@@ -75,7 +77,7 @@ export function useLogin() {
     } catch {
       setFeedback({
         type: "error",
-        message: "email ou senha invalido.",
+        message: "Não foi possível conectar ao servidor. Tente novamente.",
       });
     } finally {
       setIsLoading(false);

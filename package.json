@@ -2,18 +2,23 @@
   "name": "aula-login",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
+    "test": "node --conditions=react-server --test tests/*.test.mjs",
+    "test:smoke": "node tests/http-smoke.mjs",
     "lint": "eslint"
   },
   "dependencies": {
+    "@fontsource/roboto": "^5.3.0",
     "clsx": "^2.1.1",
     "lucide-react": "^1.48.0",
-    "next": "16.3.6",
+    "next": "16.4.3",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
@@ -22,7 +27,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.6",
+    "eslint-config-next": "16.4.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
